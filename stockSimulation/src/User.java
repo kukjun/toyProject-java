@@ -1,3 +1,5 @@
+import crawling.Stock;
+
 import java.util.ArrayList;
 
 public class User {

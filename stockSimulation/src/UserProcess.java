@@ -1,4 +1,4 @@
-public class UserManagement {
+public class UserProcess {
   User user;
   public void login() {}
   public void register() {}

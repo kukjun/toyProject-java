@@ -1,3 +1,5 @@
+package crawling;
+
 public enum StockInformation {
 
   삼성전자("https://finance.naver.com/item/main.nhn?code=005930"),
@@ -29,4 +31,5 @@ public enum StockInformation {
   public String getUrl() {
     return url;
   }
+
 }

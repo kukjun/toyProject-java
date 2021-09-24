@@ -1,3 +1,5 @@
+package crawling;
+
 public class Stock {
 
   //field
@@ -18,7 +20,8 @@ public class Stock {
     this.stockTodayLowPrice = stockTodayLowPrice;
     this.stockTodayHighLimitPrice = stockTodayHighLimitPrice;
     this.stockTodayLowLimitPrice = stockTodayLowLimitPrice;
-
   }
+
+
 
 }
