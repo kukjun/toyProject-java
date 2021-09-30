@@ -4,7 +4,12 @@ public class Stock {
   private String id;
   private String name;
   private int count;
-  private int purchasePrice;
+  private int purchase_price;
+  private String user_id;
+
+  public String getUser_id() {
+    return user_id;
+  }
 
   public String getId() {
     return id;
@@ -30,12 +35,16 @@ public class Stock {
     this.count = count;
   }
 
-  public int getPurchasePrice() {
-    return purchasePrice;
+  public int getPurchase_price() {
+    return purchase_price;
   }
 
-  public void setPurchasePrice(int purchasePrice) {
-    this.purchasePrice = purchasePrice;
+  public void setPurchase_price(int purchase_price) {
+    this.purchase_price = purchase_price;
+  }
+
+  public void setUser_id(String user_id) {
+    this.user_id = user_id;
   }
 
 }

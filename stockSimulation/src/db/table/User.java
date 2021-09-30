@@ -1,26 +1,23 @@
 package db.table;
 
-import main.Member;
 
-public class TUser {
+public class User {
+
+  public enum Authority {
+    TRUE, FALSE
+  }
+
   private String id;
   private String nickname;
   private String password;
-  private boolean authority;
+  private Authority authority;
   private int asset;
 
-  public TUser() {
+  public User() {
 
   }
-  public TUser(Member member) {
-    this.id = member.getId();
-    this.nickname = member.getNickName();
-    this.password = member.getPassword();
-    this.authority = member.isAuthority();
-    this.asset = 50000000;
-  }
 
-  public TUser(String id, String nickname, String password, boolean authority, int asset) {
+  public User(String id, String nickname, String password, Authority authority, int asset) {
     this.id = id;
     this.nickname = nickname;
     this.password = password;
@@ -40,7 +37,11 @@ public class TUser {
     this.password = password;
   }
 
-  public void setAuthority(boolean authority) {
+  public Authority getAuthority() {
+    return authority;
+  }
+
+  public void setAuthority(Authority authority) {
     this.authority = authority;
   }
 
@@ -60,9 +61,6 @@ public class TUser {
     return password;
   }
 
-  public boolean isAuthority() {
-    return authority;
-  }
 
   public int getAsset() {
     return asset;

@@ -2,17 +2,17 @@ package db.query;
 
 import db.DBAccess;
 import db.table.Stock;
-import db.table.TUser;
-import main.InStock;
+import db.table.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Querys {
+public class DAO {
 
-  public boolean isUser(TUser user) {
+  // id의 유저가 있는지 확인하는 query
+  public boolean isUser(User user) {
     String query = "SELECT * FROM user WHERE id = ?";
     try (
         Connection conn = DBAccess.setConnection();
@@ -32,8 +32,13 @@ public class Querys {
     return false;
   }
 
-  public boolean isStock(TUser user, Stock stock) {
-    String query = "SELECT * FROM user, stock WHERE user.id = stock.id AND user.id = ? AND stock.name= ? ";
+  // id의 유저가 해당 name 의 stock 을 가지고 있는지 확인하는 query
+  public boolean isStock(User user, Stock stock) {
+    String query = "SELECT U.id AS id, S.name AS stockName, S.purchasePrice AS purchasePrice, S.count AS count " +
+        "FROM user U, stock S " +
+        "WHERE U.id = S.user_id " +
+        "AND user.id = ? " +
+        "AND stock.name= ? ";
     try (
         Connection conn = DBAccess.setConnection();
         PreparedStatement pstmt = conn.prepareStatement(query);
@@ -54,8 +59,11 @@ public class Querys {
   }
 
   // 세분화 할 경우 필요할 수도 있음
-  public boolean login(TUser user) {
-    String query = "SELECT id, password, authority, nickname, asset FROM user WHERE id = ? AND password = ?";
+  public boolean login(User user) {
+    String query = "SELECT id, password, authority, nickname, asset " +
+        "FROM user " +
+        "WHERE id = ? " +
+        "AND password = ?";
     try (
         Connection conn = DBAccess.setConnection();
         PreparedStatement pstmt = conn.prepareStatement(query);
@@ -66,17 +74,16 @@ public class Querys {
           ResultSet rs = pstmt.executeQuery()
       ) {
         // 만약 rs.next() 가 true -> 튜플 존재
-        if(rs.next()) {
-          // 만약 authority 가 false 이면 -> 맴버
-          if(!rs.getBoolean(3)) {
-            user.setNickname(rs.getString(4));
-            user.setAsset(rs.getInt(5));
+        if (rs.next()) {
+          // 만약 authority 가 TRUE이면
+          if (rs.getInt("authority") == User.Authority.TRUE.ordinal()) {
+            user.setNickname(rs.getString("nickname"));
+            user.setAsset(rs.getInt("asset"));
           }
           // 관리자가 아니면 괜찮음
           return true;
         }
-        // 예외처리 필요
-        return false;
+        // 예외 발생 처리
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -85,7 +92,7 @@ public class Querys {
     return false;
   }
 
-  public boolean register(TUser user) {
+  public boolean register(User user) {
     if (isUser(user)) {
       return false;
     }
@@ -99,7 +106,7 @@ public class Querys {
       pstmt.setString(1, user.getId());
       pstmt.setString(2, user.getNickname());
       pstmt.setString(3, user.getPassword());
-      pstmt.setBoolean(4, user.isAuthority());
+      pstmt.setInt(4, user.getAuthority().ordinal());
       pstmt.setInt(5, user.getAsset());
 
       int retValue = pstmt.executeUpdate();
@@ -111,19 +118,47 @@ public class Querys {
     return false;
   }
 
-  public boolean sellStock(TUser user, Stock stock, int count) {
-    // 만약 없는 주식이면
-    if(!isStock(user, stock)) {
-      return false;
+  public boolean sellStock(User user, Stock stock, int count) {
+    int inCount = 0;
+    if (isStock(user, stock)) {
+      inCount = findStockCount(user, stock);
     }
-    // 있는 주식이면
+    if(inCount == count) {
+      // Stock 삭제 연산
+    }
+    else if (inCount <= count) {
+      // Stock Update 연산
+    }
     else {
-      // 개수가
-      if(stock.getCount()=count) {
-
-      }
+      // 예외 처리
     }
+    return false;
   }
 
+  public int findStockCount(User user, Stock stock) {
+    // 먼저 몇 개 있는 확인
+    String FindCountQuery = "SELECT S.count AS count " +
+        "FROM user U, stock S " +
+        "WHERE U.id = S.user_id " +
+        "AND U.id = ? " +
+        "AND S.name = ?";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(FindCountQuery)
+    ) {
+      pstmt.setString(1, user.getId());
+      pstmt.setString(2, stock.getName());
+      try (
+          ResultSet rs = pstmt.getResultSet()
+      ) {
+        if (rs.next()) {
+          return rs.getInt("count");
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return 0;
+  }
 
 }

@@ -33,4 +33,4 @@ public class Admin extends User{
 }
 
 //UI가 Controller 가 위임
-//enum type switch문
+//enum type switch
