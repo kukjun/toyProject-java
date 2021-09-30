@@ -1,3 +1,5 @@
+package crawling;
+
 import crawling.Stock;
 import crawling.StockProcess;
 

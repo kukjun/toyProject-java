@@ -1,3 +1,5 @@
+package main;
+
 import crawling.StockProcess;
 import ui.UI;
 
