@@ -1,7 +1,7 @@
 package db.table;
 
 
-public class User {
+public class Member {
 
   public enum Authority {
     TRUE, FALSE
@@ -13,11 +13,11 @@ public class User {
   private Authority authority;
   private int asset;
 
-  public User() {
+  public Member() {
 
   }
 
-  public User(String id, String nickname, String password, Authority authority, int asset) {
+  public Member(String id, String nickname, String password, Authority authority, int asset) {
     this.id = id;
     this.nickname = nickname;
     this.password = password;
@@ -64,6 +64,17 @@ public class User {
 
   public int getAsset() {
     return asset;
+  }
+
+  @Override
+  public String toString() {
+    return "Member{" +
+        "id='" + id + '\'' +
+        ", nickname='" + nickname + '\'' +
+        ", password='" + password + '\'' +
+        ", authority=" + authority +
+        ", asset=" + asset +
+        '}';
   }
 
 }

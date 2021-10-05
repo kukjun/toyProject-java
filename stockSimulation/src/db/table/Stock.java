@@ -1,23 +1,25 @@
 package db.table;
 
 public class Stock {
-  private String id;
   private String name;
   private int count;
   private int purchase_price;
-  private String user_id;
+  private String member_id;
 
-  public String getUser_id() {
-    return user_id;
+  public Stock(String name, int count, int purchase_price, String member_id) {
+    this.name = name;
+    this.count = count;
+    this.purchase_price = purchase_price;
+    this.member_id = member_id;
   }
 
-  public String getId() {
-    return id;
+  public Stock() {
   }
 
-  public void setId(String id) {
-    this.id = id;
+  public String getMember_id() {
+    return member_id;
   }
+
 
   public String getName() {
     return name;
@@ -43,8 +45,18 @@ public class Stock {
     this.purchase_price = purchase_price;
   }
 
-  public void setUser_id(String user_id) {
-    this.user_id = user_id;
+  public void setMember_id(String member_id) {
+    this.member_id = member_id;
+  }
+
+  @Override
+  public String toString() {
+    return "Stock{" +
+        "name='" + name + '\'' +
+        ", count=" + count +
+        ", purchase_price=" + purchase_price +
+        ", member_id='" + member_id + '\'' +
+        '}';
   }
 
 }
