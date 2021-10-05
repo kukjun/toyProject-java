@@ -18,12 +18,18 @@ public class Test {
         Member.Authority.FALSE, 10000000);
     Stock registerStock = new Stock("D", 50, 10000, "kukjun123");
     Stock updateStock = new Stock("A", 30, 7500, "kukjun123");
-
+    Member admin = new Member("admin123", "KingJun", "abcd1234", Member.Authority.TRUE, 0);
 
     // isMember Test
     System.out.println("isMemberTest");
     System.out.println(dao.isMember(new Member()));
     System.out.println(dao.isMember(kukjun));
+    System.out.println(dao.isAdmin(admin));
+    System.out.println();
+
+    // isAdmin Test
+    System.out.println("isAdminTest");
+    System.out.println(dao.isAdmin(kukjun));
     System.out.println();
 
     // isStock Test

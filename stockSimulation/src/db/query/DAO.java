@@ -56,6 +56,31 @@ public class DAO {
     return false;
   }
 
+  // member 가 admin 인지 확인하는 query
+  public boolean isAdmin(Member member) {
+    String query = "SELECT * " +
+        "FROM member " +
+        "WHERE authority = ? " +
+        "AND id = ?";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query);
+    ) {
+      pstmt.setInt(1, member.getAuthority().ordinal());
+      pstmt.setString(2, member.getId());
+      try (
+          ResultSet rs = pstmt.executeQuery()
+      ) {
+        // rs에 저장된게 없으면 false, 있으면 true
+        return rs.next();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    //비정상 종료
+    return false;
+  }
+
   public Member getMember(String id, String password) {
     String query = "SELECT id, nickname, password, authority, asset " +
         "FROM member " +
@@ -323,33 +348,6 @@ public class DAO {
       e.printStackTrace();
     }
     return false;
-  }
-
-
-  public int findStockCount(Member member, Stock stock) {
-    // 먼저 몇 개 있는 확인
-    String FindCountQuery = "SELECT S.count AS count " +
-        "FROM member M, stock S " +
-        "WHERE M.id = S.member_id " +
-        "AND M.id = ? " +
-        "AND S.name = ?";
-    try (
-        Connection conn = DBAccess.setConnection();
-        PreparedStatement pstmt = conn.prepareStatement(FindCountQuery)
-    ) {
-      pstmt.setString(1, member.getId());
-      pstmt.setString(2, stock.getName());
-      try (
-          ResultSet rs = pstmt.getResultSet()
-      ) {
-        if (rs.next()) {
-          return rs.getInt("count");
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return 0;
   }
 
 }

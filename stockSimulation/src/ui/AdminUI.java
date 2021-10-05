@@ -1,19 +1,19 @@
 package ui;
 
-import main.Admin;
-import main.Member;
+import db.table.Member;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class AdminUI implements UI{
+public class AdminUI extends UI{
 
   private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-  private Admin admin;
 
-  public AdminUI(Admin admin) {
-    this.admin = admin;
+  public AdminUI(Member member) {
+    super();
+    this.member = member;
   }
+
 
   public String showStartPage() throws Exception {
     System.out.println("--------------------------------Admin Page Start--------------------------------");
@@ -42,7 +42,6 @@ public class AdminUI implements UI{
   private Member inputNickName() throws Exception {
     Member member = new Member();
     System.out.print("input NickName : ");
-    member.setNickName(br.readLine());
     return member;
   }
 

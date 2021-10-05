@@ -1,6 +1,6 @@
 package ui;
 
-import main.Member;
+import db.table.Member;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -31,7 +31,7 @@ public class MainPageUI implements UI {
     System.out.println("--------------------------------Register--------------------------------");
     member = inputIdAndPassword();
     System.out.print("input NickName : ");
-    member.setNickName(br.readLine());
+    member.setNickname(br.readLine());
     System.out.println(member.toString());
     System.out.println("if you want to sign up, enter your password.");
     System.out.print("input Password : ");

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
 import main.InStock;
-import main.Member;
 
 public class MemberUI implements UI{
 
