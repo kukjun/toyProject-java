@@ -1,21 +1,32 @@
-//package main;
-//
-//import crawling.StockProcess;
-//import ui.UI;
-//
-//public class StockSimulator {
-//  public UserProcess um;
-//  public StockProcess sm;
-//  public UI ui;
-//
-//  public StockSimulator(UserProcess um, StockProcess sm, UI ui) {
-//    this.um = um;
-//    this.sm = sm;
-//    this.ui = ui;
-//  }
-//
-//  public void simulate() {
-//
-//  }
-//
-//}
+package main;
+
+import db.table.Member;
+import ui.UI;
+
+public class StockSimulator {
+  private UI ui;
+  private Member member;
+
+  public StockSimulator(UI ui) {
+    this.ui = ui;
+    this.member = new Member();
+  }
+
+  public void changeUI(UI ui) {
+    this.ui = ui;
+  }
+
+  public void simulate() {
+    try {
+      ui.showStartPage();
+      this.member = ui.getMember();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public Member getMember() {
+    return member;
+  }
+
+}

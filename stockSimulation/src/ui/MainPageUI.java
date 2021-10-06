@@ -18,6 +18,7 @@ public class MainPageUI extends UI {
     br = new BufferedReader(new InputStreamReader(System.in));
   }
 
+  @Override
   public void showStartPage() throws Exception {
     String input;
     System.out.println("--------------------------------Main Page Start--------------------------------");
@@ -33,15 +34,10 @@ public class MainPageUI extends UI {
             failLogin();
           } else {
             successLogin();
-            if (mainPageController.checkAdmin(this.member)) {
-              // 관리자
-            } else {
-              // 멤버
-            }
+            return;
           }
           break;
         case "2":
-          // testCode
           System.out.println(showRegisterPage());
           break;
         case "3":
@@ -50,6 +46,7 @@ public class MainPageUI extends UI {
           System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
       }
     } while (!input.equals("3"));
+    this.member = null;
   }
 
   public void showLoginPage() throws Exception {
@@ -79,6 +76,10 @@ public class MainPageUI extends UI {
   public void showQuitPage() throws Exception {
     System.out.println("--------------------------------Quit--------------------------------");
     System.out.println("MainPage를 종료합니다.");
+  }
+
+  public String state(String state) {
+    return state;
   }
 
   // 입력 예외 처리해주기

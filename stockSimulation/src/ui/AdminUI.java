@@ -44,6 +44,7 @@ public class AdminUI extends UI {
           break;
       }
     } while (!input.equals("3"));
+    this.member = new Member();
   }
 
   public boolean showMemberInfoConfirm() throws Exception {
@@ -55,7 +56,6 @@ public class AdminUI extends UI {
     }
     else {
       printMemberInfo(member);
-      // changeMemberInfo 내용 작성
       return true;
     }
   }

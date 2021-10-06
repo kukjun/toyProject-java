@@ -23,7 +23,7 @@ public class UserUI extends UI{
 
   public void showStartPage() throws Exception {
     String input;
-    System.out.println("--------------------------------Member Page Start--------------------------------");
+    System.out.println("--------------------------------User Page Start--------------------------------");
     printMyInfo();
     do {
       System.out.println("1. SellStock");
@@ -45,6 +45,7 @@ public class UserUI extends UI{
           showQuitPage();
       }
     } while (!input.equals("4"));
+    this.member = new Member();
   }
 
   public void showSellStockPage() throws Exception {
