@@ -21,42 +21,81 @@ public class AdminUI extends UI {
   }
 
 
-  public String showStartPage() throws Exception {
+  public void showStartPage() throws Exception {
+    String input;
     System.out.println("--------------------------------Admin Page Start--------------------------------");
-    System.out.println("1. User information change");
-    System.out.println("2. User delete");
-    System.out.println("3. Quit");
-    return inputNumber();
+    do {
+      System.out.println("1. User information confirm");
+      System.out.println("2. User delete");
+      System.out.println("3. Quit");
+      input = inputNumber();
+      switch (input) {
+        case "1":
+          showMemberInfoConfirm();
+          break;
+        case "2":
+          showMemberDelete();
+          break;
+        case "3":
+          showQuitPage();
+          break;
+        default:
+          System.out.println("잘못입력하셨습니다. 다시 입력하세요.");
+          break;
+      }
+    } while (!input.equals("3"));
   }
 
-  public String showMemberInfoChange() throws Exception {
-    System.out.println("--------------------------------Member Information Change--------------------------------");
+  public boolean showMemberInfoConfirm() throws Exception {
+    System.out.println("--------------------------------Member Information Confirm--------------------------------");
     printAllMember();
-    return inputNumber();
+    Member member = adminController.getMemberInfo(inputNickName());
+    if (member == null) {
+      return false;
+    }
+    else {
+      printMemberInfo(member);
+      // changeMemberInfo 내용 작성
+      return true;
+    }
   }
 
-  public Member showMemberDelete() throws Exception {
+  public boolean showMemberDelete() throws Exception {
     System.out.println("--------------------------------Member Delete--------------------------------");
-    return inputNickName();
+    printAllMember();
+    Member member = adminController.getMemberInfo(inputNickName());
+    if (member == null) {
+      return false;
+    }
+    else {
+      return adminController.deleteMember(member);
+    }
+  }
+  public void showQuitPage() throws Exception {
+    System.out.println("--------------------------------Quit--------------------------------");
+    System.out.println("AdminUI를 종료합니다.");
   }
 
   private String inputNumber() throws Exception {
-    System.out.println("input number");
+    System.out.print("input number: ");
     return br.readLine();
   }
 
-  private Member inputNickName() throws Exception {
-    Member member = new Member();
+  private String inputNickName() throws Exception {
     System.out.print("input NickName : ");
-    return member;
+    return br.readLine();
   }
 
   public void printAllMember() throws Exception {
     ArrayList<String> nickNames = adminController.getAllMemberNickName();
-    for (int i=0; i<nickNames.size(); i++) {
-      System.out.println(i+1 + ". nickName : " + nickNames.get(i));
+    for (int i = 0; i < nickNames.size(); i++) {
+      System.out.println((i + 1) + " nickName : " + nickNames.get(i));
     }
 
+  }
+
+  public void printMemberInfo(Member member) {
+    System.out.println(member);
   }
 
 }

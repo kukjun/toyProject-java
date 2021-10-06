@@ -158,10 +158,73 @@ public class DAO {
     }
     return null;
   }
+  public Member getMember(String nickname) {
+    String query = "SELECT id, nickname, password, authority, asset " +
+        "FROM member " +
+        "WHERE member.nickname = ? ";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)
+    ) {
+      pstmt.setString(1, nickname);
+      try (
+          ResultSet rs = pstmt.executeQuery();
+      ) {
+        if (rs.next()) {
+          Member member = new Member(
+              rs.getString("id"),
+              rs.getString("nickname"),
+              rs.getString("password"),
+              Member.Authority.values()[rs.getInt("Authority")],
+              rs.getInt("asset")
+          );
+          return member;
+        } else {
+          return null;
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 
   public ArrayList<Member> getAllMember() {
     String query = "SELECT id, nickname, password, authority, asset " +
         "FROM member ";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query);
+        ResultSet rs = pstmt.executeQuery();
+    ) {
+      ArrayList<Member> members = new ArrayList<>();
+      while (rs.next()) {
+        Member member = new Member(
+            rs.getString("id"),
+            rs.getString("nickname"),
+            rs.getString("password"),
+            Member.Authority.values()[rs.getInt("Authority")],
+            rs.getInt("asset")
+        );
+        members.add(member);
+      }
+      if(members.isEmpty()) {
+        return null;
+      } else {
+        return members;
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public ArrayList<Member> getAllMemberExceptAdmin() {
+    String query = "SELECT id, nickname, password, authority, asset " +
+        "FROM member " +
+        "WHERE authority = 1";
     try (
         Connection conn = DBAccess.setConnection();
         PreparedStatement pstmt = conn.prepareStatement(query);

@@ -14,16 +14,16 @@ public class UITest {
     MainPageController mainPageController = new MainPageController(new DAO());
 
     // mainPage Test
-    // test
-    MainPageUI mainPageUI = new MainPageUI(mainPageController);
-    mainPageUI.showStartPage();
+//    MainPageUI mainPageUI = new MainPageUI(mainPageController);
+//    mainPageUI.showStartPage();
 
 
     //MemberUI test
 
 
     //AdminUI test
-//    AdminUI adminUI = new AdminUI(admin, adminController);
+    AdminUI adminUI = new AdminUI(admin, adminController);
+    adminUI.showStartPage();
 //    adminUI.printAllMember();
   }
 
