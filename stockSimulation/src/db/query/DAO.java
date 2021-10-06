@@ -29,6 +29,7 @@ public class DAO {
     //비정상 종료
     return false;
   }
+
   public boolean isMember(String id) {
     String query = "SELECT * FROM member WHERE id = ?";
     try (
@@ -158,6 +159,7 @@ public class DAO {
     }
     return null;
   }
+
   public Member getMember(String nickname) {
     String query = "SELECT id, nickname, password, authority, asset " +
         "FROM member " +
@@ -209,7 +211,7 @@ public class DAO {
         );
         members.add(member);
       }
-      if(members.isEmpty()) {
+      if (members.isEmpty()) {
         return null;
       } else {
         return members;
@@ -241,7 +243,7 @@ public class DAO {
         );
         members.add(member);
       }
-      if(members.isEmpty()) {
+      if (members.isEmpty()) {
         return null;
       } else {
         return members;
@@ -282,6 +284,35 @@ public class DAO {
         }
       }
 
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public Stock getStock(Stock stock) {
+    String query = "SELECT name, count, purchase_price, member_id " +
+        "FROM stock " +
+        "WHERE stock.name = ? " +
+        "AND stock.member_id = ? ";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)
+    ) {
+      pstmt.setString(1, stock.getName());
+      pstmt.setString(2, stock.getMember_id());
+      try (
+          ResultSet rs = pstmt.executeQuery();
+      ) {
+        if (rs.next()) {
+          return new Stock(
+              rs.getString("name"),
+              rs.getInt("count"),
+              rs.getInt("purchase_price"),
+              rs.getString("member_id")
+          );
+        }
+      }
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -445,6 +476,29 @@ public class DAO {
       pstmt.setInt(2, stock.getPurchase_price());
       pstmt.setString(3, stock.getName());
       pstmt.setString(4, stock.getMember_id());
+
+      int retValue = pstmt.executeUpdate();
+      conn.commit();
+
+      System.out.println(retValue + "건의 사항 처리");
+      return true;
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  public boolean updateMember(Member member) {
+    String query = "UPDATE member " +
+        "SET asset = ? " +
+        "WHERE id = ? ";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query)
+    ) {
+      conn.setAutoCommit(false);
+      pstmt.setInt(1, member.getAsset());
+      pstmt.setString(2, member.getId());
 
       int retValue = pstmt.executeUpdate();
       conn.commit();

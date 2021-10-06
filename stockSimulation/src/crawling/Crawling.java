@@ -6,6 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Crawling {
 
@@ -13,6 +14,10 @@ public class Crawling {
 
   public Crawling() {
     allCrawlingStock = new ArrayList<>();
+  }
+
+  public ArrayList<CrawlingStock> getAllCrawlingStock() {
+    return allCrawlingStock;
   }
 
   public void renewCrawlingStockInfo() throws Exception{
@@ -24,7 +29,7 @@ public class Crawling {
 
       // 제목 구하기 완료
       Elements titleCode = doc.select("div.wrap_company").select("a");
-      String title = titleCode.text();
+      String title = titleCode.text().trim();
 
       // 가격 구하기
       Elements priceCode = doc.select("p.no_today").select("em.no_down").select("span.blind");
@@ -57,6 +62,17 @@ public class Crawling {
       allCrawlingStock.add(new CrawlingStock(title, price, yesterday, todayHigh, todayLow, todayHighLimit, todayLowLimit));
 
     }
+  }
+
+  public CrawlingStock findStock(String name) {
+    Iterator<CrawlingStock> iterator = allCrawlingStock.stream().iterator();
+    while (iterator.hasNext()) {
+      CrawlingStock stock = iterator.next();
+      if (stock.getStockName().equals(name)) {
+        return stock;
+      }
+    }
+    return null;
   }
 
 

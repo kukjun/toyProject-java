@@ -34,4 +34,14 @@ public class CrawlingStock {
     return stockInfo;
   }
 
+  public String getStockName() {
+    return stockName;
+  }
+
+  public String getStockPrice() {
+    return stockPrice;
+  }
+
+
+
 }
