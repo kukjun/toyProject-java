@@ -1,44 +1,78 @@
 package ui;
 
+import controller.MainPageController;
 import db.table.Member;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-public class MainPageUI implements UI {
+public class MainPageUI extends UI {
 
   // MainPage 구현을 위한 UI
-  private BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+  private MainPageController mainPageController;
+  private BufferedReader br;
 
-  public String showStartPage() throws Exception {
+  public MainPageUI(MainPageController mainPageController) {
+    this.member = null;
+    this.mainPageController = mainPageController;
+    br = new BufferedReader(new InputStreamReader(System.in));
+  }
+
+  public void showStartPage() throws Exception {
+    String input;
     System.out.println("--------------------------------Main Page Start--------------------------------");
-    System.out.println("1. Login");
-    System.out.println("2. Register");
-    System.out.println("3. Quit");
-    System.out.print("input number : ");
-    return inputNumber();
+    do {
+      System.out.println("1. Login");
+      System.out.println("2. Register");
+      System.out.println("3. Quit");
+      input = inputNumber();
+      switch (input) {
+        case "1":
+          showLoginPage();
+          if (this.member == null) {
+            failLogin();
+          } else {
+            successLogin();
+            if (mainPageController.checkAdmin(this.member)) {
+              // 관리자
+            } else {
+              // 멤버
+            }
+          }
+          break;
+        case "2":
+          // testCode
+          System.out.println(showRegisterPage());
+          break;
+        case "3":
+          showQuitPage();
+        default:
+          System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
+      }
+    } while (!input.equals("3"));
   }
 
-  public Member showLoginPage() throws Exception {
+  public void showLoginPage() throws Exception {
+    Member member;
     System.out.println("--------------------------------Login--------------------------------");
-    return inputIdAndPassword();
-    // 이 정보를 누가 가지고 있어야 하나? -> user 관리한는 애가 가지고 있어야 한다. -> 데이터베이스와 맞춰보는 연산은 얘기 한다.
-    // UserProcess 로 넘겨줘야 한다.
+    member = inputIdAndPassword();
+    this.member = mainPageController.checkMemberDB(member);
   }
 
-  public Member showRegisterPage() throws Exception {
+  public boolean showRegisterPage() throws Exception {
     Member member;
     System.out.println("--------------------------------Register--------------------------------");
-    member = inputIdAndPassword();
-    System.out.print("input NickName : ");
-    member.setNickname(br.readLine());
-    System.out.println(member.toString());
+    member = inputMember();
+    printMemberInfo(member);
     System.out.println("if you want to sign up, enter your password.");
     System.out.print("input Password : ");
-    if(member.getPassword().equals(br.readLine())) {
-      return member;
+    if (member.getPassword().equals(br.readLine())) {
+      if (mainPageController.registerMember(member)) {
+        return true;
+      }
+      return false;
     } else {
-      return null;
+      return false;
     }
   }
 
@@ -58,7 +92,30 @@ public class MainPageUI implements UI {
   }
 
   private String inputNumber() throws Exception {
+    System.out.print("input number : ");
     return br.readLine();
   }
+
+  private Member inputMember() throws Exception {
+    Member member = inputIdAndPassword();
+    System.out.print("input nickname : ");
+    member.setNickname(br.readLine());
+    return member;
+  }
+
+  private void printMemberInfo(Member member) {
+    System.out.println("id: " + member.getId());
+    System.out.println("password: " + member.getPassword());
+    System.out.println("nickname: " + member.getNickname());
+  }
+
+  private void failLogin() {
+    System.out.println("로그인에 실패했습니다.");
+  }
+
+  private void successLogin() {
+    System.out.println("로그인에 성공하셨습니다.");
+  }
+
 
 }

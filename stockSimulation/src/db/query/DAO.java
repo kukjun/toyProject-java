@@ -29,6 +29,50 @@ public class DAO {
     //비정상 종료
     return false;
   }
+  public boolean isMember(String id) {
+    String query = "SELECT * FROM member WHERE id = ?";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query);
+    ) {
+      pstmt.setString(1, id);
+      try (
+          ResultSet rs = pstmt.executeQuery()
+      ) {
+        // rs에 저장된게 없으면 false, 있으면 true
+        return rs.next();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    //비정상 종료
+    return false;
+  }
+
+  // id, password 를 가진 유저가 있는지 확인하는 query
+  public boolean isMember(String id, String password) {
+    String query = "SELECT * " +
+        "FROM member " +
+        "WHERE id = ? " +
+        "AND password = ?";
+    try (
+        Connection conn = DBAccess.setConnection();
+        PreparedStatement pstmt = conn.prepareStatement(query);
+    ) {
+      pstmt.setString(1, id);
+      pstmt.setString(2, password);
+      try (
+          ResultSet rs = pstmt.executeQuery()
+      ) {
+        // rs에 저장된게 없으면 false, 있으면 true
+        return rs.next();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    //비정상 종료
+    return false;
+  }
 
   // id의 유저가 해당 name 의 stock 을 가지고 있는지 확인하는 query
   public boolean isStock(Member member, Stock stock) {
@@ -231,8 +275,8 @@ public class DAO {
       pstmt.setString(1, member.getId());
       pstmt.setString(2, member.getNickname());
       pstmt.setString(3, member.getPassword());
-      pstmt.setInt(4, member.getAuthority().ordinal());
-      pstmt.setInt(5, member.getAsset());
+      pstmt.setInt(4, Member.Authority.FALSE.ordinal());
+      pstmt.setInt(5, 10000000);
 
       int retValue = pstmt.executeUpdate();
       conn.commit();

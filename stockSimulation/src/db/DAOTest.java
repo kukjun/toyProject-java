@@ -6,7 +6,7 @@ import db.table.Stock;
 
 import java.util.ArrayList;
 
-public class Test {
+public class DAOTest {
 
   public static void main(String[] args) {
     DAO dao = new DAO();
