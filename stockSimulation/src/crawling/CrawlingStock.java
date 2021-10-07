@@ -1,6 +1,6 @@
 package crawling;
 
-public class Stock {
+public class CrawlingStock {
 
   //field
   String stockName;
@@ -12,7 +12,7 @@ public class Stock {
   String stockTodayLowLimitPrice;
 
   //constructor
-  Stock(String stockName, String stockPrice, String stockYesterdayPrice, String stockTodayHighPrice, String stockTodayLowPrice, String stockTodayHighLimitPrice, String stockTodayLowLimitPrice) {
+  CrawlingStock(String stockName, String stockPrice, String stockYesterdayPrice, String stockTodayHighPrice, String stockTodayLowPrice, String stockTodayHighLimitPrice, String stockTodayLowLimitPrice) {
     this.stockName = stockName;
     this.stockPrice = stockPrice;
     this.stockYesterdayPrice = stockYesterdayPrice;
@@ -33,5 +33,15 @@ public class Stock {
     stockInfo += "오늘 하한가 :" + stockTodayLowLimitPrice + "\n";
     return stockInfo;
   }
+
+  public String getStockName() {
+    return stockName;
+  }
+
+  public String getStockPrice() {
+    return stockPrice;
+  }
+
+
 
 }

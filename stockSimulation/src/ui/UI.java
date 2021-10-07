@@ -1,7 +1,17 @@
 package ui;
 
-public interface UI {
+import db.table.Member;
+import db.table.Stock;
 
-  public abstract void showUI();
+public class UI {
+  protected Member member;
+
+  public void showStartPage() throws Exception {
+
+  }
+
+  public Member getMember() {
+    return member;
+  }
 
 }
