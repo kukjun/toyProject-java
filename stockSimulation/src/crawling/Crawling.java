@@ -10,10 +10,25 @@ import java.util.Iterator;
 
 public class Crawling {
 
+  //Instance
+  private static Crawling instance;
+
   private ArrayList<CrawlingStock> allCrawlingStock;
 
-  public Crawling() {
+  private Crawling() {
     allCrawlingStock = new ArrayList<>();
+  }
+
+  static {
+    try {
+      instance = new Crawling();
+    } catch(Exception e) {
+      throw new RuntimeException("Create instance fail");
+    }
+  }
+
+  public static Crawling getInstance() {
+    return instance;
   }
 
   public ArrayList<CrawlingStock> getAllCrawlingStock() {

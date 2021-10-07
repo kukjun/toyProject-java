@@ -9,6 +9,25 @@ import java.util.ArrayList;
 
 public class DAO {
 
+  private static final DAO instance;
+
+  public DAO() {
+  }
+
+  static {
+    try {
+      instance = new DAO();
+    }
+    catch(Exception e) {
+      throw new RuntimeException("Create instance fail. erre msg = "
+          + e.getMessage());
+    }
+  }
+
+  public static DAO getInstance() {
+    return instance;
+  }
+
   // id의 유저가 있는지 확인하는 query
   public boolean isMember(Member member) {
     String query = "SELECT * FROM member WHERE id = ?";

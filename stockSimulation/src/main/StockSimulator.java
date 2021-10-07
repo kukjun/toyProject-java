@@ -24,7 +24,7 @@ public class StockSimulator {
   public StockSimulator() {
     this.member = new Member();
     this.dao = new DAO();
-    this.crawling = new Crawling();
+    this.crawling = Crawling.getInstance();
     this.adminController = new AdminController(dao);
     this.mainPageController = new MainPageController(dao);
     this.userController = new UserController(crawling, dao);

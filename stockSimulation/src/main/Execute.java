@@ -14,7 +14,7 @@ public class Execute {
   public static void main(String[] args) {
     Member member = new Member();
     DAO dao = new DAO();
-    Crawling crawling = new Crawling();
+    Crawling crawling = Crawling.getInstance();
     AdminController adminController = new AdminController(dao);
     MainPageController mainPageController = new MainPageController(dao);
     UserController userController = new UserController(crawling, dao);
