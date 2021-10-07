@@ -8,7 +8,7 @@ import controller.UserController;
 import db.table.Member;
 import db.table.Stock;
 
-public class UserUI extends UI{
+public class UserUI extends UI {
 
   private UserController userController;
   private BufferedReader br;
@@ -23,25 +23,26 @@ public class UserUI extends UI{
 
   public void showStartPage() throws Exception {
     String input;
-    System.out.println("--------------------------------User Page Start--------------------------------");
-    printMyInfo();
+
     do {
+      System.out.println("--------------------------------User Page Start--------------------------------");
+      printMyInfo();
       System.out.println("1. SellStock");
       System.out.println("2. PurchaseStock");
       System.out.println("3. showUserInfoDetail");
       System.out.println("4. Quit");
       input = inputNumber();
-      switch(input) {
+      switch (input) {
         case "1":
           showSellStockPage();
           break;
-        case"2":
+        case "2":
           showPurchaseStockPage();
           break;
-        case"3":
+        case "3":
           showUserInfoDetail();
           break;
-        case"4":
+        case "4":
           showQuitPage();
       }
     } while (!input.equals("4"));
@@ -57,10 +58,14 @@ public class UserUI extends UI{
     if (userController.checkUserHavenStock(stockName, member)) {
       Stock stock = userController.getCrawlingStock(stockName, this.member);
       stock.setCount(inputCount());
-      if(userController.sellUpdateStock(this.member, stock)) {
-        System.out.println("판매 완료");
+      if (userController.checkSellStock(member, stock)) {
+        if (userController.sellUpdateStock(this.member, stock)) {
+          System.out.println("판매 완료");
+        } else {
+          System.out.println("판매 실패");
+        }
       } else {
-        System.out.println("판매 실패");
+        System.out.println("보유 주식의 개수보다 더 많이 입력했습니다.");
       }
     } else {
       System.out.println("찾을 수 없는 주식입니다. 그 주식을 지금 가지고 있지 않으십니다.");
@@ -76,8 +81,8 @@ public class UserUI extends UI{
     if (userController.checkCrawlingStock(stockName)) {
       Stock stock = userController.getCrawlingStock(stockName, this.member);
       stock.setCount(inputCount());
-      if(userController.checkPurchaseStock(this.member, stock)) {
-        if(userController.purchaseUpdateStock(this.member, stock)) {
+      if (userController.checkPurchaseStock(this.member, stock)) {
+        if (userController.purchaseUpdateStock(this.member, stock)) {
           System.out.println("구매 완료");
         } else {
           System.out.println("구매 실패");
@@ -95,10 +100,9 @@ public class UserUI extends UI{
     System.out.println("--------------------------------show User Information Detail--------------------------------");
     System.out.println("please wait...");
     userController.renewAllStocks();
+    showCash();
     showUserTotalAsset();
     showUserStockComparison();
-
-
   }
 
   public void showQuitPage() throws Exception {
@@ -146,7 +150,14 @@ public class UserUI extends UI{
   }
 
   private void showUserStockComparison() throws Exception {
-    System.out.println();
+    ArrayList<String> comparisonStrings = userController.comparisonStocks(this.member);
+    for (String comparisonString : comparisonStrings) {
+      System.out.println(comparisonString);
+    }
+  }
+
+  private void showCash() throws Exception {
+    System.out.println("Cash: " + member.getAsset());
   }
 
 }

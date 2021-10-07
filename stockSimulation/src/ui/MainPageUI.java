@@ -42,6 +42,7 @@ public class MainPageUI extends UI {
           break;
         case "3":
           showQuitPage();
+          break;
         default:
           System.out.println("잘못된 입력입니다. 다시 입력해주세요.");
       }

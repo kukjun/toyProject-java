@@ -81,12 +81,9 @@ public class UserController {
       Stock DBStock = dao.getStock(stock);
       if (DBStock.getCount() >= stock.getCount()) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
     }
+    return false;
 
   }
 
@@ -97,13 +94,20 @@ public class UserController {
   public boolean sellUpdateStock(Member member, Stock stock) {
 
     Stock beforeStock = dao.getStock(stock);
+
+    member.setAsset(
+        member.getAsset() + stock.getPurchase_price() * stock.getCount()
+    );
+    if (!dao.updateMember(member)) {
+      return false;
+    }
+
     int count = beforeStock.getCount() - stock.getCount();
-    if(count == 0) {
-      if(!dao.deleteStock(member, stock)) {
+    if (count == 0) {
+      if (!dao.deleteStock(member, stock)) {
         return false;
       }
-    }
-    else {
+    } else {
       int purchase_price = beforeStock.getPurchase_price();
       stock.setCount(count);
       stock.setPurchase_price(purchase_price);
@@ -112,12 +116,6 @@ public class UserController {
       }
     }
 
-    member.setAsset(
-        member.getAsset() + stock.getPurchase_price() * stock.getCount()
-    );
-    if (!dao.updateMember(member)) {
-      return false;
-    }
     return true;
   }
 
@@ -151,12 +149,12 @@ public class UserController {
     while (iterator.hasNext()) {
       Stock stock = iterator.next();
       CrawlingStock crawlingStock = crawling.findStock(stock.getName());
-      asset += Integer.parseInt(crawlingStock.getStockPrice().replaceAll(",","")) * stock.getCount();
+      asset += Integer.parseInt(crawlingStock.getStockPrice().replaceAll(",", "")) * stock.getCount();
     }
     return asset;
   }
 
-  public ArrayList<String> ComparisonStocks(Member member) {
+  public ArrayList<String> comparisonStocks(Member member) {
     ArrayList<Stock> stockHavenMember = dao.getStockHavenMember(member);
     Iterator<Stock> iterator = stockHavenMember.stream().iterator();
     ArrayList<String> comparisons = new ArrayList<>();
@@ -164,11 +162,11 @@ public class UserController {
       Stock stock = iterator.next();
       CrawlingStock crawlingStock = crawling.findStock(stock.getName());
       comparisons.add(
-          "주식 이름: " + stock.getName() + ", 보유 개수: " + stock.getCount() + "구매 가격: " + stock.getPurchase_price() +
-              "현재 가격: " + crawlingStock.getStockPrice()
+          "주식 이름: " + stock.getName() + ", 보유 개수: " + stock.getCount() + ", 구매 가격: " + stock.getPurchase_price() +
+              ", 현재 가격: " + crawlingStock.getStockPrice()
       );
     }
-    if(comparisons.isEmpty()) {
+    if (comparisons.isEmpty()) {
       return null;
     }
     return comparisons;
